@@ -37,6 +37,7 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(compose.materialIconsExtended)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
         }
@@ -77,3 +78,8 @@ dependencies {
     debugImplementation(compose.uiTooling)
 }
 
+compose.resources {
+    // Re-enabling with explicit configuration
+    publicResClass = true
+    packageOfResClass = "com.hamideh.apranik"
+}
