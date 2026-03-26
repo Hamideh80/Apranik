@@ -30,4 +30,9 @@ object EtherlyDimensions {
     val IconSizeMedium = 16.dp
     val IconSizeLarge = 18.dp
     val IconSizeExtraLarge = 28.dp
+
+    // Additional spacing for specific UI elements
+    val SpacingXSmall = 4.dp
+    val HeaderSpacingStart = 10.dp
+    val BrandMarkIconSize = 16.dp
 }
