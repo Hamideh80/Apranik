@@ -15,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -27,7 +28,6 @@ import com.hamideh.apranik.ui.theme.EtherlyDimensions
 import com.hamideh.apranik.ui.theme.EtherlyTypography
 import com.hamideh.apranik.ui.util.ArrowIcon
 import com.hamideh.apranik.ui.util.BrandMark
-import com.hamideh.apranik.ui.util.HomeTopBar
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -36,6 +36,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun InstituteSuccessScreen(
     viewModel: InstituteSuccessViewModel,
+    logoBytes: ByteArray? = null,
     onCreateCourseClick: () -> Unit,
     onSkipClick: () -> Unit
 ) {
@@ -43,6 +44,7 @@ fun InstituteSuccessScreen(
 
     InstituteSuccessContent(
         uiState = uiState,
+        logoBytes = logoBytes,
         onCreateCourseClick = onCreateCourseClick,
         onSkipClick = onSkipClick
     )
@@ -54,12 +56,13 @@ fun InstituteSuccessScreen(
 @Composable
 fun InstituteSuccessContent(
     uiState: InstituteSuccessUiState,
+    logoBytes: ByteArray? = null,
     onCreateCourseClick: () -> Unit,
     onSkipClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
-            SuccessTopBar(uiState.instituteName, uiState.subdomain)
+            SuccessTopBar(uiState.instituteName, uiState.subdomain, logoBytes)
         },
         containerColor = EtherlyColors.PageBackground
     ) { paddingValues ->
@@ -142,10 +145,10 @@ fun InstituteSuccessContent(
 }
 
 /**
- * Custom header for the success screen showing institute details.
+ * Custom header for the success screen showing institute details and optional logo.
  */
 @Composable
-fun SuccessTopBar(instituteName: String, subdomain: String) {
+fun SuccessTopBar(instituteName: String, subdomain: String, logoBytes: ByteArray?) {
     Column(modifier = Modifier.statusBarsPadding()) {
         Row(
             modifier = Modifier
@@ -153,7 +156,28 @@ fun SuccessTopBar(instituteName: String, subdomain: String) {
                 .padding(EtherlyDimensions.PaddingMedium),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BrandMark()
+            if (logoBytes != null) {
+                // Display the uploaded logo placeholder
+                Box(
+                    modifier = Modifier
+                        .size(EtherlyDimensions.IconSizeExtraLarge)
+                        .background(
+                            color = EtherlyColors.PillBackground,
+                            shape = RoundedCornerShape(EtherlyDimensions.CornerRadiusSmall)
+                        )
+                        .clip(RoundedCornerShape(EtherlyDimensions.CornerRadiusSmall)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = instituteName.take(1).uppercase(),
+                        color = EtherlyColors.AccentGreen,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            } else {
+                BrandMark()
+            }
+
             Column(modifier = Modifier.padding(start = EtherlyDimensions.SpacingSmall)) {
                 Text(
                     text = instituteName,

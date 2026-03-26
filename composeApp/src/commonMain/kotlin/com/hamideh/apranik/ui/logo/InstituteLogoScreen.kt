@@ -16,18 +16,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.hamideh.apranik.ui.theme.EtherlyColors
 import com.hamideh.apranik.ui.theme.EtherlyDimensions
 import com.hamideh.apranik.ui.theme.EtherlyTypography
 import com.hamideh.apranik.ui.util.ArrowIcon
 import com.hamideh.apranik.ui.util.HomeTopBar
+import com.hamideh.apranik.ui.util.rememberBitmapFromBytes
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -80,7 +79,6 @@ fun InstituteLogoContent(
             Text(
                 text = "Add Your Institute Logo",
                 style = MaterialTheme.typography.headlineMedium,
-                fontSize = EtherlyTypography.Headline,
                 color = EtherlyColors.HeadlineColor,
                 fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Center
@@ -94,12 +92,14 @@ fun InstituteLogoContent(
                 modifier = Modifier.padding(horizontal = EtherlyDimensions.PaddingMedium)
             )
 
-            Spacer(modifier = Modifier.height(64.dp))
+            Spacer(modifier = Modifier.height(EtherlyDimensions.SpacingXXXXLarge))
 
             // Logo Picker Section
+            val bitmap = rememberBitmapFromBytes(uiState.selectedImageBytes)
+            
             Box(
                 modifier = Modifier
-                    .size(120.dp)
+                    .size(EtherlyDimensions.LogoPickerSize)
                     .background(
                         color = EtherlyColors.PillBackground,
                         shape = RoundedCornerShape(EtherlyDimensions.CornerRadiusMedium)
@@ -108,16 +108,18 @@ fun InstituteLogoContent(
                     .clickable { onTriggerPicker() },
                 contentAlignment = Alignment.Center
             ) {
-                if (uiState.selectedImageBytes == null) {
+                if (bitmap == null) {
                     AddIcon()
                 } else {
-                    // In a real implementation, you would convert ByteArray to ImageBitmap here.
-                    // For now, we show a placeholder text if bytes are present.
-                    Text("Logo Selected", color = EtherlyColors.AccentGreen, fontWeight = FontWeight.Medium)
+                    Image(
+                        bitmap = bitmap,
+                        contentDescription = "Selected Logo",
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
             
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(EtherlyDimensions.SpacingLarge))
             
             Text(
                 text = "Upload JPG or PNG (max 1MB)",
@@ -127,7 +129,7 @@ fun InstituteLogoContent(
             )
 
             if (uiState.errorMessage != null) {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(EtherlyDimensions.SpacingSmall))
                 Text(
                     text = uiState.errorMessage,
                     color = MaterialTheme.colorScheme.error,
@@ -152,8 +154,7 @@ fun InstituteLogoContent(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = "Continue",
-                        fontSize = EtherlyTypography.ButtonText,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.labelLarge,
                     )
                     Spacer(modifier = Modifier.width(EtherlyDimensions.SpacingLarge))
                     ArrowIcon(color = Color.White)
@@ -167,7 +168,7 @@ fun InstituteLogoContent(
                 Text(
                     text = "Skip for now",
                     color = EtherlyColors.BodyColor,
-                    fontSize = 14.sp
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
 
@@ -181,8 +182,8 @@ fun InstituteLogoContent(
  */
 @Composable
 fun AddIcon() {
-    Canvas(modifier = Modifier.size(32.dp)) {
-        val strokeWidth = 3.dp.toPx()
+    Canvas(modifier = Modifier.size(EtherlyDimensions.IconSizeExtraLarge)) {
+        val strokeWidth = EtherlyDimensions.StrokeThick.toPx()
         val color = EtherlyColors.AccentGreen
         
         // Vertical line

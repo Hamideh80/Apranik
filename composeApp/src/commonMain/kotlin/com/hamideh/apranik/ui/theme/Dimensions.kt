@@ -17,6 +17,7 @@ object EtherlyDimensions {
     val SpacingXLarge = 18.dp
     val SpacingXXLarge = 24.dp
     val SpacingXXXLarge = 28.dp
+    val SpacingXXXXLarge = 64.dp
     
     val ButtonHeight = 56.dp
     val HeaderHeight = 1.dp
@@ -35,4 +36,12 @@ object EtherlyDimensions {
     val SpacingXSmall = 4.dp
     val HeaderSpacingStart = 10.dp
     val BrandMarkIconSize = 16.dp
+    
+    val LogoPickerSize = 120.dp
+
+    // Stroke widths for custom drawings
+    val StrokeThin = 1.8.dp
+    val StrokeMedium = 2.dp
+    val StrokeThick = 3.dp
+    val StrokeExtraThick = 6.dp
 }
