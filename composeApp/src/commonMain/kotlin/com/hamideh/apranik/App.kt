@@ -28,9 +28,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hamideh.apranik.ui.institute.InstituteScreen
 import com.hamideh.apranik.ui.institute.InstituteViewModel
+import com.hamideh.apranik.ui.success.InstituteSuccessScreen
+import com.hamideh.apranik.ui.success.InstituteSuccessViewModel
 import com.hamideh.apranik.ui.theme.EtherlyColors
 import com.hamideh.apranik.ui.theme.EtherlyDimensions
 import com.hamideh.apranik.ui.theme.EtherlyTypography
@@ -44,6 +47,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 sealed class Screen {
     object Home : Screen()
     object CreateInstitute : Screen()
+    data class InstituteSuccess(val instituteName: String) : Screen()
 }
 
 /**
@@ -58,7 +62,7 @@ fun App() {
             modifier = Modifier.fillMaxSize(),
             color = EtherlyColors.PageBackground,
         ) {
-            when (currentScreen) {
+            when (val screen = currentScreen) {
                 is Screen.Home -> {
                     HomeScreen(
                         onCreateInstituteClick = {
@@ -74,7 +78,25 @@ fun App() {
                             currentScreen = Screen.Home
                         },
                         onInstituteCreated = {
-                            // After success, we could navigate back to home or a dashboard
+                            // On success, navigate to the Success screen with the name
+                            currentScreen = Screen.InstituteSuccess(viewModel.uiState.value.instituteName)
+                        }
+                    )
+                }
+                is Screen.InstituteSuccess -> {
+                    val successViewModel: InstituteSuccessViewModel = viewModel { InstituteSuccessViewModel() }
+                    
+                    // Initialize the Success state with the name passed from navigation
+                    remember(screen.instituteName) {
+                        successViewModel.init(screen.instituteName)
+                    }
+
+                    InstituteSuccessScreen(
+                        viewModel = successViewModel,
+                        onCreateCourseClick = {
+                            // Placeholder for course creation
+                        },
+                        onSkipClick = {
                             currentScreen = Screen.Home
                         }
                     )
